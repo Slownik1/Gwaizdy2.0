@@ -1,10 +1,12 @@
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.lang.*;
 
-public class Main  {
+public class Main implements ActionListener {
 
-    public static void main(String[] args) {
+    public Main() {
 
         JFrame f = new JFrame();
         JLabel l = new JLabel();
@@ -123,6 +125,7 @@ public class Main  {
         JButton addButton = new JButton();
         addButton.setText("Dodaj gwiazde");
         addButton.setBounds(150, 350, 100, 40);
+        addButton.addActionListener(this);
         f.add(addButton);
 
         f.setSize(400,500);
@@ -132,5 +135,13 @@ public class Main  {
     }
 
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    }
+
+    public static void main(String[] args) {
+        new Main();
+    }
 
 }
