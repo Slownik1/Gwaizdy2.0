@@ -18,8 +18,6 @@ public class Main implements ActionListener {
     JTextField textRektensjaMinuta = new JTextField();
     JTextField textRektensjaSekunda = new JTextField();
     JTextField textObserwowanaWielkosc = new JTextField();
-    JTextField textObserwowanaWielkoscCzesc = new JTextField();
-    JTextField textAbsolutnaWielkosc = new JTextField();
     JTextField textOdleglosc = new JTextField();
     JTextField textGwiazdozbior = new JTextField();
     String[] polkula = {"PN", "PD"};
@@ -79,28 +77,17 @@ public class Main implements ActionListener {
 
         JLabel labelObserwowanaWielkosc = new JLabel();
         labelObserwowanaWielkosc.setText("Obserwowana wielkosc: ");
-        textObserwowanaWielkosc.setBounds(150, 140, 30,20);
-        textObserwowanaWielkoscCzesc.setBounds(185, 140, 30,20);
+        textObserwowanaWielkosc.setBounds(150, 140, 100,20);
         labelObserwowanaWielkosc.setBounds(20, 140, 100, 20);
         f.add(textObserwowanaWielkosc);
-        f.add(textObserwowanaWielkoscCzesc);
         f.add(labelObserwowanaWielkosc);
-
-
-
-        JLabel labelAbsolutnaWielkosc = new JLabel();
-        labelAbsolutnaWielkosc.setText("Absolutna wielkosc: ");
-        textAbsolutnaWielkosc.setBounds(150, 170, 100,20);
-        labelAbsolutnaWielkosc.setBounds(20,170, 100, 20);
-        f.add(textAbsolutnaWielkosc);
-        f.add(labelAbsolutnaWielkosc);
 
 
 
         JLabel labelOdleglosc = new JLabel();
         labelOdleglosc.setText("Odleglosc: ");
-        textOdleglosc.setBounds(150,200,100,20);
-        labelOdleglosc.setBounds(20, 200, 100,20);
+        textOdleglosc.setBounds(150,170,100,20);
+        labelOdleglosc.setBounds(20, 170, 100,20);
         f.add(textOdleglosc);
         f.add(labelOdleglosc);
 
@@ -108,8 +95,8 @@ public class Main implements ActionListener {
 
         JLabel labelGwiazdozbior = new JLabel();
         labelGwiazdozbior.setText("Gwiazdozbior");
-        textGwiazdozbior.setBounds(150,230,100,20);
-        labelGwiazdozbior.setBounds(20,230,100,20);
+        textGwiazdozbior.setBounds(150,200,100,20);
+        labelGwiazdozbior.setBounds(20,200,100,20);
         f.add(textGwiazdozbior);
         f.add(labelGwiazdozbior);
 
@@ -117,8 +104,8 @@ public class Main implements ActionListener {
 
         JLabel labelPolkula = new JLabel();
         labelPolkula.setText("Polkula: ");
-        comboPolkula.setBounds(150, 260, 100,20);
-        labelPolkula.setBounds(20, 260, 100,20);
+        comboPolkula.setBounds(150, 230, 100,20);
+        labelPolkula.setBounds(20, 230, 100,20);
         f.add(comboPolkula);
         f.add(labelPolkula);
 
@@ -126,8 +113,8 @@ public class Main implements ActionListener {
 
         JLabel labelTemperatura = new JLabel();
         labelTemperatura.setText("Temperatura: ");
-        textTemperatura.setBounds(150,290, 100,20);
-        labelTemperatura.setBounds(20, 290, 100,20);
+        textTemperatura.setBounds(150,260, 100,20);
+        labelTemperatura.setBounds(20, 260, 100,20);
         f.add(textTemperatura);
         f.add(labelTemperatura);
 
@@ -135,8 +122,8 @@ public class Main implements ActionListener {
 
         JLabel labelMasa = new JLabel();
         labelMasa.setText("Masa: ");
-        textMasa.setBounds(150,320, 100,20);
-        labelMasa.setBounds(20, 320, 100, 20);
+        textMasa.setBounds(150,290, 100,20);
+        labelMasa.setBounds(20, 290, 100, 20);
         f.add(textMasa);
         f.add(labelMasa);
 
@@ -144,7 +131,7 @@ public class Main implements ActionListener {
 
         JButton addButton = new JButton();
         addButton.setText("Dodaj gwiazde");
-        addButton.setBounds(150, 350, 100, 40);
+        addButton.setBounds(150, 310, 100, 40);
         addButton.addActionListener(this);
         f.add(addButton);
 
@@ -165,6 +152,13 @@ public class Main implements ActionListener {
         String stringNazwa="";
         String stringStopnie="";
         String stringRektensja="";
+        double doubleObserwowanaWielkoscGwiazdowa=0;
+        double doubleAbsolutnaWielkoscGwiazdowa=Double.parseDouble(textOdleglosc.getText());;
+        double doubleOdleglosc = Double.parseDouble(textOdleglosc.getText());
+        String stringGwiazdozbior = textGwiazdozbior.getText();
+        String stringPolkula = (String)comboPolkula.getSelectedItem();
+        double doubleTemperatura = 0;
+        double doubleMasa=0;
 
         if(!(textNazwa.getText()).matches("[A-Z]{3}\\d{3}"))
             uwagaLabel.setText("BLEDNA NAZWA");
@@ -210,6 +204,32 @@ public class Main implements ActionListener {
                 }
             }
         }
+
+        if((Double.parseDouble(textObserwowanaWielkosc.getText())<-26.74)&&(Double.parseDouble(textObserwowanaWielkosc.getText())>15.00)){
+            uwagaLabel.setText("BLEDNA WARTOSC MAGNITUDO");
+        }
+        else{
+            doubleObserwowanaWielkoscGwiazdowa=Double.parseDouble(textObserwowanaWielkosc.getText());
+        }
+
+        doubleAbsolutnaWielkoscGwiazdowa = doubleObserwowanaWielkoscGwiazdowa-(5*Math.log10((doubleObserwowanaWielkoscGwiazdowa/3.26)+5));
+
+        if(Double.parseDouble(textTemperatura.getText())<2000){
+            uwagaLabel.setText("ZA NISKA TEMPERATURA");
+        }
+        else{
+            doubleTemperatura=Double.parseDouble(textTemperatura.getText());
+        }
+
+        if((Double.parseDouble(textMasa.getText())<0.1)&&(Double.parseDouble(textMasa.getText())>50)){
+            uwagaLabel.setText("BLEDNA MASA");
+        }
+        else{
+            doubleMasa=Double.parseDouble(textMasa.getText());
+        }
+
+
+
 
     }
 
