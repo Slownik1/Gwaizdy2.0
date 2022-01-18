@@ -23,6 +23,6 @@ public enum literaGrecka {
     FI,
     CHI,
     PSI,
-    OMWGA;
+    OMEGA;
 
 }

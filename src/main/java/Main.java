@@ -1,8 +1,14 @@
 
+import javax.json.Json;
+import javax.json.JsonBuilderFactory;
+import javax.json.JsonObject;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.*;
+import java.util.Collections;
 
 public class Main implements ActionListener {
 
@@ -166,22 +172,22 @@ public class Main implements ActionListener {
             stringNazwa = textNazwa.getText();
 
         if((Integer.parseInt(textDeklinacjaStopnie.getText())>90)||(Integer.parseInt(textDeklinacjaStopnie.getText())<0)) {
-            uwagaLabel.setText("POPRAW STOPNIE");
+            uwagaLabel.setText("POPRAW STOPNIE1");
         }else {
             stringStopnie += textDeklinacjaStopnie.getText();
 
             if ((Integer.parseInt(textDeklinacjaMinuty.getText()) > 60) || (Integer.parseInt(textDeklinacjaMinuty.getText()) < 0)) {
-                uwagaLabel.setText("POPRAW STOPNIE");
+                uwagaLabel.setText("POPRAW STOPNIE2");
             } else {
                 stringStopnie += ":" + textDeklinacjaStopnie.getText();
 
                 if ((Integer.parseInt(textDeklinacjaSekundy.getText()) > 60) || (Integer.parseInt(textDeklinacjaSekundy.getText()) < 0)) {
-                    uwagaLabel.setText("POPRAW STOPNIE");
+                    uwagaLabel.setText("POPRAW STOPNIE3");
                 } else {
                     stringStopnie += ":" + textDeklinacjaStopnie.getText();
 
                     if ((Integer.parseInt(textDeklinacjaCzesciSekundy.getText()) > 60) || (Integer.parseInt(textDeklinacjaCzesciSekundy.getText()) < 0)) {
-                        uwagaLabel.setText("POPRAW STOPNIE");
+                        uwagaLabel.setText("POPRAW STOPNIE4");
                     } else {
                         stringStopnie += "," + textDeklinacjaStopnie.getText();
                     }
@@ -192,15 +198,15 @@ public class Main implements ActionListener {
         if((Integer.parseInt(textRektensjaGodzina.getText())>24)&&(Integer.parseInt(textRektensjaGodzina.getText())<0)){
             uwagaLabel.setText("POPRAW REKTENSJE");
         }else{
-            stringRektensja+=textRektensjaGodzina;
+            stringRektensja+=textRektensjaGodzina.getText();
             if((Integer.parseInt(textRektensjaMinuta.getText())>24)&&(Integer.parseInt(textRektensjaMinuta.getText())<0)){
                 uwagaLabel.setText("POPRAW REKTENSJE");
             }else {
-                stringRektensja += textRektensjaMinuta;
+                stringRektensja += textRektensjaMinuta.getText();
                 if ((Integer.parseInt(textRektensjaSekunda.getText()) > 24) && (Integer.parseInt(textRektensjaSekunda.getText()) < 0)) {
                     uwagaLabel.setText("POPRAW REKTENSJE");
                 } else {
-                    stringRektensja += textRektensjaSekunda;
+                    stringRektensja += textRektensjaSekunda.getText();
                 }
             }
         }
@@ -228,7 +234,40 @@ public class Main implements ActionListener {
             doubleMasa=Double.parseDouble(textMasa.getText());
         }
 
+        JsonBuilderFactory bf = Json.createBuilderFactory(Collections.emptyMap());
+        JsonObject gwiazda = bf.createObjectBuilder()
+                .add("Nazwa", stringNazwa)
+                .add("Deklinacja", stringStopnie)
+                .add("Rektensja",stringRektensja)
+                .add("ObserwowanaWielkoscGwiazdowa",doubleObserwowanaWielkoscGwiazdowa)
+                .add("AbsolutnaWielkoscGwiazdowa", doubleAbsolutnaWielkoscGwiazdowa)
+                .add("Odleglosc", doubleOdleglosc)
+                .add("Gwiazdozbior", stringGwiazdozbior)
+                .add("Polkula", stringPolkula)
+                .add("Temp", doubleTemperatura)
+                .add("Masa", doubleMasa).build();
 
+        String path = "C:\\Users\\dawid\\IdeaProjects\\Gwiazdy2.0\\src";
+
+        FileWriter file = null;
+        try {
+            file = new FileWriter(path);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        try {
+            file.write(gwiazda.toString());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        try {
+            file.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+
+        //Gwiazda gwaizda1 = new Gwiazda(stringNazwa, );
 
 
     }
