@@ -3,12 +3,17 @@ import javax.json.Json;
 import javax.json.JsonBuilderFactory;
 import javax.json.JsonObject;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.*;
 import java.util.Collections;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.json.simple.JSONObject;
 
 public class Main implements ActionListener {
 
@@ -146,11 +151,46 @@ public class Main implements ActionListener {
         uwagaLabel.setBounds(140, 380, 200, 50);
         f.add(uwagaLabel);
 
-        f.setSize(400,500);
+
+        JTextArea wyswietlonagwiazda = new JTextArea(10,10);
+        wyswietlonagwiazda.setBounds(150, 400,400 , 400);
+
+        JFileChooser fc = new JFileChooser();
+        JButton showButton = new JButton();
+        showButton.setBounds(300, 310, 100 , 40);
+        showButton.setText("Wyświetl gwiazdy");
+
+
+        showButton.addActionListener(ev -> {
+            int returnVal = fc.showOpenDialog(f);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                try {
+                    BufferedReader input = new BufferedReader(new InputStreamReader(
+                            new FileInputStream(file)));
+                    wyswietlonagwiazda.read(input, "READING FILE :-)");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("Operation is CANCELLED :(");
+            }
+        });
+
+        f.add(wyswietlonagwiazda);
+        f.add(showButton);
+
+
+
+
+
+
+        f.setSize(600,600);
         f.setLayout(null);
         f.setVisible(true);
 
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -234,42 +274,30 @@ public class Main implements ActionListener {
             doubleMasa=Double.parseDouble(textMasa.getText());
         }
 
-        JsonBuilderFactory bf = Json.createBuilderFactory(Collections.emptyMap());
-        JsonObject gwiazda = bf.createObjectBuilder()
-                .add("Nazwa", stringNazwa)
-                .add("Deklinacja", stringStopnie)
-                .add("Rektensja",stringRektensja)
-                .add("ObserwowanaWielkoscGwiazdowa",doubleObserwowanaWielkoscGwiazdowa)
-                .add("AbsolutnaWielkoscGwiazdowa", doubleAbsolutnaWielkoscGwiazdowa)
-                .add("Odleglosc", doubleOdleglosc)
-                .add("Gwiazdozbior", stringGwiazdozbior)
-                .add("Polkula", stringPolkula)
-                .add("Temp", doubleTemperatura)
-                .add("Masa", doubleMasa).build();
-
-        String path = "C:\\Users\\dawid\\IdeaProjects\\Gwiazdy2.0\\src";
-
-        FileWriter file = null;
+        JSONObject gwiazda = new JSONObject();
+        gwiazda.put("Nazwa", stringNazwa);
+        gwiazda.put("Deklinacja", stringStopnie);
+        gwiazda.put("Rektensja", stringRektensja);
+        gwiazda.put("ObserwowanaWielkoscGwiazdowa", doubleObserwowanaWielkoscGwiazdowa);
+        gwiazda.put("AbsolutnaWielkoscGwiazdowa", doubleAbsolutnaWielkoscGwiazdowa);
+        gwiazda.put("Odleglosc", doubleOdleglosc);
+        gwiazda.put("Gwiazdozbior", stringGwiazdozbior);
+        gwiazda.put("Polkula", stringPolkula);
+        gwiazda.put("Temp", doubleTemperatura);
+        gwiazda.put("Masa", doubleMasa);
+        ObjectMapper mapper = new ObjectMapper();
+        String path = "C:\\Users\\donip\\Desktop\\Programowanie";
         try {
-            file = new FileWriter(path);
-        } catch (IOException ex) {
-            ex.printStackTrace();
+            mapper.writeValue(new File("gwiazda.obj"), gwiazda);
+
+            //Gwiazda gwaizda1 = new Gwiazda(stringNazwa, );
+
+
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+
+
         }
-        try {
-            file.write(gwiazda.toString());
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        try {
-            file.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-
-        //Gwiazda gwaizda1 = new Gwiazda(stringNazwa, );
-
-
     }
 
     public static void main(String[] args) {
