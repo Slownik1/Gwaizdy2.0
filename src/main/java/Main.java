@@ -3,13 +3,13 @@ import javax.json.Json;
 import javax.json.JsonBuilderFactory;
 import javax.json.JsonObject;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.*;
 import java.util.Collections;
-import java.io.File;
+
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -151,11 +151,46 @@ public class Main implements ActionListener {
         uwagaLabel.setBounds(140, 380, 200, 50);
         f.add(uwagaLabel);
 
-        f.setSize(400,500);
+
+        JTextArea wyswietlonagwiazda = new JTextArea(10,10);
+        wyswietlonagwiazda.setBounds(150, 400,400 , 400);
+
+        JFileChooser fc = new JFileChooser();
+        JButton showButton = new JButton();
+        showButton.setBounds(300, 310, 100 , 40);
+        showButton.setText("Wyświetl gwiazdy");
+
+
+        showButton.addActionListener(ev -> {
+            int returnVal = fc.showOpenDialog(f);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                try {
+                    BufferedReader input = new BufferedReader(new InputStreamReader(
+                            new FileInputStream(file)));
+                    wyswietlonagwiazda.read(input, "READING FILE :-)");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("Operation is CANCELLED :(");
+            }
+        });
+
+        f.add(wyswietlonagwiazda);
+        f.add(showButton);
+
+
+
+
+
+
+        f.setSize(600,600);
         f.setLayout(null);
         f.setVisible(true);
 
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
